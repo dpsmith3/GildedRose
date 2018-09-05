@@ -101,6 +101,17 @@ describe('Gilded Rose', function () {
         expect(updatedItems[0].quality).to.equal(8);
     });
 
+    it('should decrease in quality by 2 if it is a Conjured item before sell-by-date', function() {
+        const gildedRose = new GildedRose([ new Item('Conjured foo', 1, 10) ]);
+        const updatedItems = gildedRose.updateQuality();
+        expect(updatedItems[0].quality).to.equal(8);
+    });
+
+    it('should decrease in quality by 4 if it is a Conjured item after sell-by-date', function() {
+        const gildedRose = new GildedRose([ new Item('Conjured foo', -1, 10) ]);
+        const updatedItems = gildedRose.updateQuality();
+        expect(updatedItems[0].quality).to.equal(6);
+    });
 
 
 });

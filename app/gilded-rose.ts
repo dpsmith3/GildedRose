@@ -3,17 +3,25 @@ export class Item {
     sellIn: number;
     quality: number;
 
-    constructor(name, sellIn, quality) {
+    constructor(name: string, sellIn: number, quality: number) {
         this.name = name;
         this.sellIn = sellIn;
         this.quality = quality;
     }
 }
 
+
+// Better approach: increment sellIn at the end of updateQuality(), rather than for
+// each object category.
+// Things such as 'Conjured' should be like flags.
+// getQualityChange() should read for things like conjured and return the amount by
+// which the quality should change.
+
+
 export class GildedRose {
     items: Array<Item>;
 
-    constructor(items = []) {
+    constructor(items: Array<Item>) {
         this.items = items;
     }
 
@@ -33,7 +41,7 @@ export class GildedRose {
         if (item.quality > 0) { // The Quality of an item is never negative
             item.quality -= interval;
         } else {
-            item.quality = 0; 
+            item.quality = 0;
         }
     }
 
@@ -58,6 +66,16 @@ export class GildedRose {
         }
     }
 
+    updateConjured(item: Item) {
+        if (item.sellIn >= 0) {
+            this.decrementQuality(item, 2);
+        } else {
+            this.decrementQuality(item, 4);
+        }
+        this.decrementSellIn(item, 1);
+
+    }
+
     updateNormalItem(item: Item) {
         if (item.sellIn >= 0) {
             this.decrementQuality(item, 1);
@@ -76,7 +94,10 @@ export class GildedRose {
                 this.updateBrie(item);
             } else if (item.name == 'Sulfuras, Hand of Ragnaros') {
                 // "Sulfuras", being a legendary item, never has to be sold or decreases in Quality
-            } else {
+            } else if (item.name.indexOf('Conjured') > -1) {
+                this.updateConjured(item);
+            }
+            else {
                 // Any other items
                 this.updateNormalItem(item);
             }

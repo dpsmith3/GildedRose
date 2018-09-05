@@ -2,8 +2,13 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es5",
-        "noImplicitAny": false,
-        "sourceMap": false
+        "noImplicitAny": true,
+        "sourceMap": false,
+        "lib": [
+            "es6",
+            "dom",
+            "es2017"
+         ]
     },
     "exclude": [
         "node_modules"
